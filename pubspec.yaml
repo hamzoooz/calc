@@ -1,0 +1,51 @@
+name: modern_calculator
+description: A professional, modern Calculator Application with scientific functions, history, and multi-language support.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # State Management
+  provider: ^6.1.1
+
+  # Math & Logic
+  intl: ^0.20.2
+
+  # UI/UX
+  google_fonts: ^6.1.0
+  auto_size_text: ^3.0.0
+
+  # Persistence
+  shared_preferences: ^2.2.2
+
+  # Sharing
+  share_plus: ^7.2.1
+
+  # Icons
+  cupertino_icons: ^1.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/app_icon.png"
+  adaptive_icon_background: "#667eea"
+  adaptive_icon_foreground: "assets/icon/app_icon_foreground.png"
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/icon/
