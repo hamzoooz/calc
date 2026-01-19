@@ -61,85 +61,109 @@ class DisplayPanel extends StatelessWidget {
             ],
           ),
 
-          const Spacer(),
+          Expanded(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return SingleChildScrollView(
+                  reverse: true,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: constraints.maxHeight,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        // Expression
+                        GestureDetector(
+                          onLongPress: () =>
+                              _copyToClipboard(context, calc.expression),
+                          child: AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 200),
+                            child: Text(
+                              calc.expression.isEmpty ? ' ' : calc.expression,
+                              key: ValueKey(calc.expression),
+                              style: TextStyle(
+                                fontSize: isLandscape ? 20 : 24,
+                                fontWeight: FontWeight.w400,
+                                color: isDark
+                                    ? AppColors.textSecondaryDark
+                                    : AppColors.textSecondaryLight,
+                                letterSpacing: 1,
+                              ),
+                              textAlign: TextAlign.end,
+                              maxLines: null,
+                            ),
+                          ),
+                        ),
 
-          // Expression
-          GestureDetector(
-            onLongPress: () => _copyToClipboard(context, calc.expression),
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 200),
-              child: Text(
-                calc.expression.isEmpty ? ' ' : calc.expression,
-                key: ValueKey(calc.expression),
-                style: TextStyle(
-                  fontSize: isLandscape ? 20 : 24,
-                  fontWeight: FontWeight.w400,
-                  color: isDark
-                      ? AppColors.textSecondaryDark
-                      : AppColors.textSecondaryLight,
-                  letterSpacing: 1,
-                ),
-                textAlign: TextAlign.end,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ),
+                        const SizedBox(height: 8),
 
-          const SizedBox(height: 8),
+                        // Preview (real-time calculation)
+                        if (calc.preview.isNotEmpty &&
+                            calc.preview != calc.result)
+                          AnimatedOpacity(
+                            opacity: calc.preview.isNotEmpty ? 1.0 : 0.0,
+                            duration: const Duration(milliseconds: 200),
+                            child: Text(
+                              '= ${calc.preview}',
+                              style: TextStyle(
+                                fontSize: isLandscape ? 18 : 22,
+                                fontWeight: FontWeight.w400,
+                                color: isDark
+                                    ? AppColors.accent.withOpacity(0.7)
+                                    : AppColors.accentDark.withOpacity(0.7),
+                              ),
+                              textAlign: TextAlign.end,
+                            ),
+                          ),
 
-          // Preview (real-time calculation)
-          if (calc.preview.isNotEmpty && calc.preview != calc.result)
-            AnimatedOpacity(
-              opacity: calc.preview.isNotEmpty ? 1.0 : 0.0,
-              duration: const Duration(milliseconds: 200),
-              child: Text(
-                '= ${calc.preview}',
-                style: TextStyle(
-                  fontSize: isLandscape ? 18 : 22,
-                  fontWeight: FontWeight.w400,
-                  color: isDark
-                      ? AppColors.accent.withOpacity(0.7)
-                      : AppColors.accentDark.withOpacity(0.7),
-                ),
-                textAlign: TextAlign.end,
-              ),
-            ),
+                        const SizedBox(height: 12),
 
-          const SizedBox(height: 12),
-
-          // Result
-          GestureDetector(
-            onLongPress: () => _copyToClipboard(context, calc.result),
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 300),
-              transitionBuilder: (child, animation) {
-                return FadeTransition(
-                  opacity: animation,
-                  child: SlideTransition(
-                    position: Tween<Offset>(
-                      begin: const Offset(0, 0.1),
-                      end: Offset.zero,
-                    ).animate(animation),
-                    child: child,
+                        // Result
+                        GestureDetector(
+                          onLongPress: () =>
+                              _copyToClipboard(context, calc.result),
+                          child: AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 300),
+                            transitionBuilder: (child, animation) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: SlideTransition(
+                                  position: Tween<Offset>(
+                                    begin: const Offset(0, 0.1),
+                                    end: Offset.zero,
+                                  ).animate(animation),
+                                  child: child,
+                                ),
+                              );
+                            },
+                            child: AutoSizeText(
+                              calc.result,
+                              key: ValueKey(calc.result),
+                              style: TextStyle(
+                                fontSize: isLandscape ? 48 : 64,
+                                fontWeight: FontWeight.w300,
+                                color: calc.hasError
+                                    ? (isDark
+                                        ? AppColors.deleteDark
+                                        : AppColors.delete)
+                                    : (isDark
+                                        ? AppColors.textDark
+                                        : AppColors.textLight),
+                                letterSpacing: -1,
+                              ),
+                              textAlign: TextAlign.end,
+                              maxLines: 1,
+                              minFontSize: 24,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
-              child: AutoSizeText(
-                calc.result,
-                key: ValueKey(calc.result),
-                style: TextStyle(
-                  fontSize: isLandscape ? 48 : 64,
-                  fontWeight: FontWeight.w300,
-                  color: calc.hasError
-                      ? (isDark ? AppColors.deleteDark : AppColors.delete)
-                      : (isDark ? AppColors.textDark : AppColors.textLight),
-                  letterSpacing: -1,
-                ),
-                textAlign: TextAlign.end,
-                maxLines: 1,
-                minFontSize: 24,
-              ),
             ),
           ),
         ],
