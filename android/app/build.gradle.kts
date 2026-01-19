@@ -57,3 +57,8 @@ android {
 flutter {
     source = "../.."
 }
+
+dependencies {
+    implementation("com.google.android.play:feature-delivery:2.1.0")
+}
+

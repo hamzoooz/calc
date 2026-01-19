@@ -11,3 +11,8 @@
 
 # Google Fonts
 -keep class com.google.android.gms.** { *; }
+
+# Play Core
+-keep class com.google.android.play.core.** { *; }
+-keep interface com.google.android.play.core.** { *; }
+-dontwarn com.google.android.play.core.**
